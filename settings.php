@@ -25,34 +25,37 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$settings->add(new admin_seting_configfile('mod_codeactivity/pathtojava',
-        get_string('pathtojava', 'codeactivity'),
-        get_string('pathtojava_help', 'codeactivity'),
-        ''));
-$settings->add(new admin_setting_configfile('mod_codeactivity/pathtojavac',
-        get_string('pathtojavac', 'codeactivity'),
-        get_string('pathtojavac_help', 'codeactivity'),
-        ''));
-$settings->add(new admin_setting_configfile('mod_codeactivity/pathtojunit',
-        get_string('pathtojunit', 'codeactivity'),
-        get_string('pathtojunit_help', 'codeactivity'),
-        ''));
-$settings->add(new admin_setting_configfile('mod_codeactivity/pathtohamcrest',
-        get_string('pathtohamcrest', 'codeactivity'),
-        get_string('pathtohamcrest_help', 'codeactivity'),
-        ''));
+if ($ADMIN->fulltree) {
+    require_once(dirname(__FILE__).'/lib.php');
+    $settings->add(new admin_setting_configexecutable('mod_codeactivity/pathtojava',
+            get_string('pathtojava', 'codeactivity'),
+            get_string('pathtojava_help', 'codeactivity'),
+            ''));
+    $settings->add(new admin_setting_configexecutable('mod_codeactivity/pathtojavac',
+            get_string('pathtojavac', 'codeactivity'),
+            get_string('pathtojavac_help', 'codeactivity'),
+            ''));
+    $settings->add(new admin_setting_configfile('mod_codeactivity/pathtojunit',
+            get_string('pathtojunit', 'codeactivity'),
+            get_string('pathtojunit_help', 'codeactivity'),
+            ''));
+    $settings->add(new admin_setting_configfile('mod_codeactivity/pathtohamcrest',
+            get_string('pathtohamcrest', 'codeactivity'),
+            get_string('pathtohamcrest_help', 'codeactivity'),
+            ''));
 
-$settings->add(new admin_setting_configfile('mod_codeactivity/pathtopy2',
-        get_string('pathtopy2', 'codeactivity'),
-        get_string('pathtopy2_help', 'codeactivity'),
-        ''));
-$settings->add(new admin_setting_configfile('mod_codeactivity/pathtopy3',
-        get_string('pathtopy3', 'codeactivity'),
-        get_string('pathtopy3_help', 'codeactivity'),
-        '')); 
+    $settings->add(new admin_setting_configexecutable('mod_codeactivity/pathtopy2',
+            get_string('pathtopy2', 'codeactivity'),
+            get_string('pathtopy2_help', 'codeactivity'),
+            ''));
+    $settings->add(new admin_setting_configexecutable('mod_codeactivity/pathtopy3',
+            get_string('pathtopy3', 'codeactivity'),
+            get_string('pathtopy3_help', 'codeactivity'),
+            '')); 
 
-$settings->add(new admin_setting_configtext('mod_codeactivity/defaulttimeout',
-        get_string('defaulttimeout', 'codeactivity'),
-        get_string('defaulttimeout_help', 'codeactivity'),
-        2,
-        PARAM_INT));
+    $settings->add(new admin_setting_configtext('mod_codeactivity/defaulttimeout',
+            get_string('defaulttimeout', 'codeactivity'),
+            get_string('defaulttimeout_help', 'codeactivity'),
+            2,
+            PARAM_INT));
+}
