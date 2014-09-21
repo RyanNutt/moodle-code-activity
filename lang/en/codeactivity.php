@@ -73,5 +73,18 @@ $string['files_student_help']   = 'Student files are those that your students wi
 $string['files_readonly_help']  = 'Read only files are viewable by your students in the assignment, but cannot be edited. Typically you will use these for example data files or sample output.';
 $string['files_extra_help']     = 'Extra files are those that are copied to the working folder, but not directly visable to your students. <br><br>These will normally be files like data files that you may want your students to read with their code, but not be able to directly view. Or, you could use this field to include additional files like .JAR files you need for your students\' or your test code to run.';
 
+$string['test_type']            = 'Test Type';
+$string['unittest']             = 'Unit Test';
+$string['outputmatch']          = 'Output Matching'; 
+
+$string['unittest_code']        = 'Unit Test Code'; 
+$string['expected_output']      = 'Expected Output';
+$string['convert_nulls']        = 'Convert nulls to spaces';
+$string['ignore_whitespace']    = 'Ignore trailing white space'; 
+
+$string['test_name']            = 'Test Name'; 
+
+$string['runfile']              = 'File to run'; 
+
 // Messages
 $string['err_nolanguages'] = 'There are currently no languages set. You will need to <a href="'.$CFG->wwwroot.'/admin/settings.php?section=modsettingcodeactivity">set at least one language</a> before using any activity created by this plugin.'; 

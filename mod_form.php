@@ -45,11 +45,18 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         'maxfiles' => 50,
         'accepted_types' => '*' 
         );
+    
     /**
      * Defines forms elements
      */
     public function definition() {
+        global $PAGE, $CFG; 
+        $PAGE->requires->jquery();
+        $PAGE->requires->jquery_plugin('ui');
+        $PAGE->requires->jquery_plugin('ui-css');
 
+        $PAGE->requires->js('/mod/codeactivity/js/codeactivity.js');
+        
         $mform = $this->_form;
 
         /* Check to see if there are languages set, and if not display
@@ -92,7 +99,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         
         $this->filesSection($mform);
 
-        $this->testsSection($mform); 
+        $this->testsSection(); 
         
 
         //-------------------------------------------------------------------------------
@@ -101,22 +108,24 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // add standard buttons, common to all modules
         $this->add_action_buttons();
+        
+        $this->_form->addElement('html', '<script type="text/javascript">jQuery(document).ready(function() {codeActivity.initEdit(); codeActivity.ajaxURL = "' . $CFG->wwwroot . '/mod/codeactivity/ajax.php"; console.info(codeActivity);}); </script>'); 
     }
     
     /**
      * Output the timing section of the form
      * @param type $mform
      */
-    private function timingSection($mform) {
-        $mform->addElement('header', 'timing', get_string('timing', 'codeactivity')); 
+    private function timingSection() {
+        $this->_form->addElement('header', 'timing', get_string('timing', 'codeactivity')); 
         
-        $mform->addElement('date_time_selector', 'opendate', get_string('open_date', 'codeactivity'), self::$datefieldoptions);
-        $mform->addHelpButton(
+        $this->_form->addElement('date_time_selector', 'opendate', get_string('open_date', 'codeactivity'), self::$datefieldoptions);
+        $this->_form->addHelpButton(
                 'opendate',
                 'open_date',
                 'codeactivity');
-        $mform->addElement('date_time_selector', 'duedate', get_string('due_date', 'codeactivity'), self::$datefieldoptions);
-        $mform->addHelpButton(
+        $this->_form->addElement('date_time_selector', 'duedate', get_string('due_date', 'codeactivity'), self::$datefieldoptions);
+        $this->_form->addHelpButton(
                 'duedate',
                 'due_date',
                 'codeactivity'); 
@@ -126,41 +135,41 @@ class mod_codeactivity_mod_form extends moodleform_mod {
      * Output the Files section of the form
      * @param type $mform
      */
-    private function filesSection($mform) {
-        $mform->addElement('header', 'files', 'Files'); 
+    private function filesSection() {
+        $this->_form->addElement('header', 'files', 'Files'); 
         
-        $mform->addElement(
+        $this->_form->addElement(
                 'filemanager', 
                 'files_student', 
                 get_string('files_student', 'codeactivity'), 
                 null,
                 self::$fileoptions
                 );
-        $mform->addHelpButton(
+        $this->_form->addHelpButton(
                 'files_student',
                 'files_student',
                 'codeactivity'); 
         
-        $mform->addElement(
+        $this->_form->addElement(
                 'filemanager',
                 'files_readonly',
                 get_string('files_readonly', 'codeactivity'),
                 null,
                 self::$fileoptions
                 );
-        $mform->addHelpButton(
+        $this->_form->addHelpButton(
                 'files_readonly',
                 'files_readonly',
                 'codeactivity');
         
-        $mform->addElement(
+        $this->_form->addElement(
                 'filemanager',
                 'files_extra',
                 get_string('files_extra', 'codeactivity'),
                 null,
                 self::$fileoptions
                 );
-        $mform->addHelpButton(
+        $this->_form->addHelpButton(
                 'files_extra',
                 'files_extra',
                 'codeactivity'); 
@@ -170,7 +179,67 @@ class mod_codeactivity_mod_form extends moodleform_mod {
      * Output the Tests section of the form
      * @param type $mform
      */
-    private function testsSection($mform) {
-        $mform->addElement('header', 'tests', 'Tests'); 
+    private function testsSection() {
+        $this->_form->addElement('header', 'tests', 'Tests'); 
+        
+        
+        $this->_form->addElement('html', '<div id="ca-add-test" style="display:none;">');
+        //get_string('codeactivityname', 'codeactivity'), array('size'=>'64'));
+        $this->_form->addElement('text',
+                'testname',
+                get_string('test_name', 'codeactivity'),
+                array('size' => '64')
+                );
+        $this->_form->setType('testname', PARAM_RAW);
+        $this->_form->addElement(
+                'select', 
+                'testtype', 
+                get_string('test_type', 'codeactivity'), 
+                array(
+                    'unittest' => get_string('unittest', 'codeactivity'), 
+                    'outputmatch' => get_string('outputmatch', 'codeactivity')
+                    )
+                ); 
+        
+        $this->_form->addElement(
+                'textarea',
+                'unittestcode',
+                get_string('unittest_code', 'codeactivity')
+                ); 
+        
+        $this->_form->addElement(
+                'select',
+                'runfile',
+                get_string('runfile', 'codeactivity'),
+                array()); 
+        
+        $this->_form->addElement(
+                'textarea',
+                'expectedoutput',
+                get_string('expected_output', 'codeactivity')); 
+
+        $this->_form->addElement(
+                'selectyesno',
+                'convertnulls',
+                get_string('convert_nulls', 'codeactivity')); 
+        $this->_form->addElement(
+                'selectyesno',
+                'ignorewhitespace',
+                get_string('ignore_whitespace', 'codeactivity')); 
+        
+        
+        $this->_form->addElement('html', '</div>'); // #ca-add-test
+        
+        $buttonarray=array();
+        
+        $buttonarray[] = $this->_form->createElement('button', 'add_test', 'Add Test');
+        $buttonarray[] = $this->_form->createElement('button', 'add_save', 'Save');
+        $buttonarray[] = $this->_form->createElement('button', 'add_cancel', 'Cancel');
+        
+        $this->_form->addGroup($buttonarray, 'add_buttons', '', array(''), false);
+        
+        $this->_form->addElement('hidden', 'ca_temp_code', uniqid()); 
+        $this->_form->setType('ca_temp_code', PARAM_RAW); 
+       
     }
 }

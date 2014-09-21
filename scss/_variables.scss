@@ -1,6 +1,9 @@
+
+// Color variables
 $color_err: red;
 $color_err_background: lighten($color_err, 45%); 
 
+// Mixins
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
      -moz-border-radius: $radius;
