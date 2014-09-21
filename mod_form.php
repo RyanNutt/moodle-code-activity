@@ -56,6 +56,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         $PAGE->requires->jquery_plugin('ui-css');
 
         $PAGE->requires->js('/mod/codeactivity/js/codeactivity.js');
+        $PAGE->requires->js('/mod/codeactivity/js/ace/ace.js'); 
         
         $mform = $this->_form;
 
@@ -201,12 +202,15 @@ class mod_codeactivity_mod_form extends moodleform_mod {
                     )
                 ); 
         
+        $this->_form->addElement('html', '<div id="ca-unittestcode" style="display:none;">'); 
         $this->_form->addElement(
                 'textarea',
                 'unittestcode',
                 get_string('unittest_code', 'codeactivity')
                 ); 
+        $this->_form->addElement('html', '</div>'); 
         
+        $this->_form->addElement('html', '<div id="ca-outputmatching" style="display:none;">');
         $this->_form->addElement(
                 'select',
                 'runfile',
@@ -226,7 +230,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
                 'selectyesno',
                 'ignorewhitespace',
                 get_string('ignore_whitespace', 'codeactivity')); 
-        
+        $this->_form->addElement('html', '</div>'); 
         
         $this->_form->addElement('html', '</div>'); // #ca-add-test
         

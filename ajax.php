@@ -29,7 +29,7 @@ if (!defined('AJAX_SCRIPT')) {
 }
 
 require_once(dirname(__FILE__).'/../../config.php');
-
+require_once($CFG->dirroot.'/repository/lib.php');
 // For unit tests to work.
 global $CFG, $PAGE;
 
@@ -39,6 +39,27 @@ $params = array();
 
 // Need to get the filters in the right order so that the query receives them in the right order.
 foreach ($_POST as $name => $value) {
-    $params[$name] = clean_param($value, PARAM_ALPHANUMEXT);
+    $params[$name] = $value; //clean_param($value, PARAM_ALPHANUMEXT);
 }
-print_r($params);
+
+if ($params['action'] == 'listFiles') {
+    $draftIDs = explode(',', $params['draftIDs']);
+    $files = array(); 
+    foreach ($draftIDs as $id) {
+        $data = repository::prepare_listing(file_get_drafarea_files($id, '/'));
+        if (!empty($data->list)) {
+            foreach ($data->list as $f) {
+                $files[] = $f->filename;
+            }
+        } 
+    }
+    
+    $out = array(
+        'draftIDs' => $draftIDs,
+        'files' => $files
+    );
+    
+    header('Content-type: application/json');
+    echo json_encode($out);
+    die(); 
+}
