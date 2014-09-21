@@ -1,0 +1,9 @@
+$color_err: red;
+$color_err_background: lighten($color_err, 45%); 
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}

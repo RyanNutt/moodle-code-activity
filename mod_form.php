@@ -29,12 +29,22 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once(__DIR__.'/inc/classes/codeactivity.php'); 
 
 /**
  * Module instance settings form
  */
 class mod_codeactivity_mod_form extends moodleform_mod {
 
+    private static $datefieldoptions = array(
+        'optional' => true,     // sets up the "Enable" checkbox
+        'step' => 5);           // number of minutes in dropdown
+    private static $fileoptions = array(
+        'subdirs' => 0, 
+        'maxbytes' => 0, 
+        'maxfiles' => 50,
+        'accepted_types' => '*' 
+        );
     /**
      * Defines forms elements
      */
@@ -42,10 +52,21 @@ class mod_codeactivity_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
+        /* Check to see if there are languages set, and if not display
+         * a message.  The $languages variable is going to be used later
+         * as well when the select box for languages is displayed. 
+         */
+        $languages = codeactivity::getLanguages();
+        if (empty($languages)) {
+            $mform->addElement('html', '<p class="ca-error">'.get_string('err_nolanguages', 'codeactivity').'</p>'); 
+        }
+        
+        
         //-------------------------------------------------------------------------------
         // Adding the "general" fieldset, where all the common settings are showed
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
+        
         // Adding the standard "name" field
         $mform->addElement('text', 'name', get_string('codeactivityname', 'codeactivity'), array('size'=>'64'));
         if (!empty($CFG->formatstringstriptags)) {
@@ -56,17 +77,23 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'codeactivityname', 'codeactivity');
-
+        
         // Adding the standard "intro" and "introformat" fields
         $this->add_intro_editor();
 
-        //-------------------------------------------------------------------------------
-        // Adding the rest of codeactivity settings, spreeading all them into this fieldset
-        // or adding more fieldsets ('header' elements) if needed for better logic
-        $mform->addElement('static', 'label1', 'codeactivitysetting1', 'Your codeactivity fields go here. Replace me!');
+        // Language dropdown
+        $mform->addElement('select', 'language', get_string('language', 'codeactivity'), $languages); 
+        $mform->addHelpButton(
+                'language',
+                'language',
+                'codeactivity'); 
+        
+        $this->timingSection($mform);
+        
+        $this->filesSection($mform);
 
-        $mform->addElement('header', 'codeactivityfieldset', get_string('codeactivityfieldset', 'codeactivity'));
-        $mform->addElement('static', 'label2', 'codeactivitysetting2', 'Your codeactivity fields go here. Replace me!');
+        $this->testsSection($mform); 
+        
 
         //-------------------------------------------------------------------------------
         // add standard elements, common to all modules
@@ -74,5 +101,76 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // add standard buttons, common to all modules
         $this->add_action_buttons();
+    }
+    
+    /**
+     * Output the timing section of the form
+     * @param type $mform
+     */
+    private function timingSection($mform) {
+        $mform->addElement('header', 'timing', get_string('timing', 'codeactivity')); 
+        
+        $mform->addElement('date_time_selector', 'opendate', get_string('open_date', 'codeactivity'), self::$datefieldoptions);
+        $mform->addHelpButton(
+                'opendate',
+                'open_date',
+                'codeactivity');
+        $mform->addElement('date_time_selector', 'duedate', get_string('due_date', 'codeactivity'), self::$datefieldoptions);
+        $mform->addHelpButton(
+                'duedate',
+                'due_date',
+                'codeactivity'); 
+    }
+    
+    /**
+     * Output the Files section of the form
+     * @param type $mform
+     */
+    private function filesSection($mform) {
+        $mform->addElement('header', 'files', 'Files'); 
+        
+        $mform->addElement(
+                'filemanager', 
+                'files_student', 
+                get_string('files_student', 'codeactivity'), 
+                null,
+                self::$fileoptions
+                );
+        $mform->addHelpButton(
+                'files_student',
+                'files_student',
+                'codeactivity'); 
+        
+        $mform->addElement(
+                'filemanager',
+                'files_readonly',
+                get_string('files_readonly', 'codeactivity'),
+                null,
+                self::$fileoptions
+                );
+        $mform->addHelpButton(
+                'files_readonly',
+                'files_readonly',
+                'codeactivity');
+        
+        $mform->addElement(
+                'filemanager',
+                'files_extra',
+                get_string('files_extra', 'codeactivity'),
+                null,
+                self::$fileoptions
+                );
+        $mform->addHelpButton(
+                'files_extra',
+                'files_extra',
+                'codeactivity'); 
+    }
+    
+    /**
+     * Output the Tests section of the form
+     * @param type $mform
+     */
+    private function testsSection($mform) {
+        $mform->addElement('header', 'tests', 'Tests'); 
     }
 }
