@@ -1,0 +1,6 @@
+
+codeactivity = {
+    initEdit: function() {
+        
+    }
+}
