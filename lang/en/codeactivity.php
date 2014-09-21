@@ -29,12 +29,28 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'codeactivity';
-$string['modulenameplural'] = 'codeactivitys';
+$string['modulename'] = 'Code Activity';
+$string['modulenameplural'] = 'Code Activities';
 $string['modulename_help'] = 'Use the codeactivity module for... | The codeactivity module allows...';
 $string['codeactivityfieldset'] = 'Custom example fieldset';
-$string['codeactivityname'] = 'codeactivity name';
+$string['codeactivityname'] = 'Code Activity Name';
 $string['codeactivityname_help'] = 'This is the content of the help tooltip associated with the codeactivityname field. Markdown syntax is supported.';
-$string['codeactivity'] = 'codeactivity';
-$string['pluginadministration'] = 'codeactivity administration';
-$string['pluginname'] = 'codeactivity';
+$string['codeactivity'] = 'Code Activity';
+$string['pluginadministration'] = 'Code Activity Admin';
+$string['pluginname'] = 'Code Activity';
+
+// Strings for the settings page
+$string['pathtojava']           = 'Path to Java';
+$string['pathtojava_help']      = 'Server path to the Java executable';
+$string['pathtojavac']          = 'Path to JavaC';
+$string['pathtojavac_help']     = 'Server path to the Java compiler'; 
+$string['pathtopy2']            = 'Path to Python 2'; 
+$string['pathtopy2_help']       = 'Server path to the Python 2 interpreter'; 
+$string['pathtopy3']            = 'Path to Python 3'; 
+$string['pathtopy3_help']       = 'Server path to the Python 3 interpreter';
+$string['pathtohamcrest']       = 'Path to Hamcrest.jar'; 
+$string['pathtohamcrest_help']  = 'Server path to the hamcrest.jar file. This file is needed by JUnit for running tests.';
+$string['pathtojunit']          = 'Path to JUnit.jar'; 
+$string['pathtojunit_help']     = 'Server path to the junit.jar file. This file is needed to run unit tests on Java files.'; 
+$string['defaulttimeout']       = 'Default timeout';
+$string['defaulttimeout_help']  = 'Default number of seconds before a test is considered a failure. This can be overwritten on individual tests and also in JUnit test files.'; 
