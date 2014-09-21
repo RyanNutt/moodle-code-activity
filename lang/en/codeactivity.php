@@ -17,24 +17,24 @@
 
 
 /**
- * English strings for newmodule
+ * English strings for codeactivity
  *
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package    mod_newmodule
- * @copyright  2011 Your Name
+ * @package    mod_codeactivity
+ * @copyright  2014 Ryan Nutt http://www.nutt.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'newmodule';
-$string['modulenameplural'] = 'newmodules';
-$string['modulename_help'] = 'Use the newmodule module for... | The newmodule module allows...';
-$string['newmodulefieldset'] = 'Custom example fieldset';
-$string['newmodulename'] = 'newmodule name';
-$string['newmodulename_help'] = 'This is the content of the help tooltip associated with the newmodulename field. Markdown syntax is supported.';
-$string['newmodule'] = 'newmodule';
-$string['pluginadministration'] = 'newmodule administration';
-$string['pluginname'] = 'newmodule';
+$string['modulename'] = 'codeactivity';
+$string['modulenameplural'] = 'codeactivitys';
+$string['modulename_help'] = 'Use the codeactivity module for... | The codeactivity module allows...';
+$string['codeactivityfieldset'] = 'Custom example fieldset';
+$string['codeactivityname'] = 'codeactivity name';
+$string['codeactivityname_help'] = 'This is the content of the help tooltip associated with the codeactivityname field. Markdown syntax is supported.';
+$string['codeactivity'] = 'codeactivity';
+$string['pluginadministration'] = 'codeactivity administration';
+$string['pluginname'] = 'codeactivity';

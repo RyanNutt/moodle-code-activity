@@ -20,10 +20,10 @@
  *
  * NOTE: this is an example how to insert log event during installation/update.
  * It is not really essential to know about it, but these logs were created as example
- * in the previous 1.9 NEWMODULE.
+ * in the previous 1.9 codeactivity.
  *
- * @package    mod_newmodule
- * @copyright  2011 Your Name <your@email.adress>
+ * @package    mod_codeactivity
+ * @copyright  2014 Ryan Nutt http://www.nutt.net <your@email.adress>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,8 +32,8 @@ defined('MOODLE_INTERNAL') || die();
 global $DB;
 
 $logs = array(
-    array('module'=>'newmodule', 'action'=>'add', 'mtable'=>'newmodule', 'field'=>'name'),
-    array('module'=>'newmodule', 'action'=>'update', 'mtable'=>'newmodule', 'field'=>'name'),
-    array('module'=>'newmodule', 'action'=>'view', 'mtable'=>'newmodule', 'field'=>'name'),
-    array('module'=>'newmodule', 'action'=>'view all', 'mtable'=>'newmodule', 'field'=>'name')
+    array('module'=>'codeactivity', 'action'=>'add', 'mtable'=>'codeactivity', 'field'=>'name'),
+    array('module'=>'codeactivity', 'action'=>'update', 'mtable'=>'codeactivity', 'field'=>'name'),
+    array('module'=>'codeactivity', 'action'=>'view', 'mtable'=>'codeactivity', 'field'=>'name'),
+    array('module'=>'codeactivity', 'action'=>'view all', 'mtable'=>'codeactivity', 'field'=>'name')
 );
