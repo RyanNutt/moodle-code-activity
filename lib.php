@@ -88,11 +88,49 @@ function codeactivity_add_instance(stdClass $codeactivity, mod_codeactivity_mod_
  * @return boolean Success/Fail
  */
 function codeactivity_update_instance(stdClass $codeactivity, mod_codeactivity_mod_form $mform = null) {
-    global $DB;
+    global $DB, $USER;
 
     $codeactivity->timemodified = time();
     $codeactivity->id = $codeactivity->instance;
-
+    //print_r($codeactivity); die(); 
+    $context = context_module::instance($codeactivity->coursemodule);
+    if ($draftitemid = file_get_submitted_draft_itemid('files_student')) {
+        
+        file_save_draft_area_files(
+                $draftitemid, 
+                $context->id, 
+                'mod_codeactivity', 
+                'files_student', 
+                0, 
+                array(
+                    'subdirs'=>false
+                    )
+                );
+    }
+    
+    if ($draftitemid = file_get_submitted_draft_itemid('files_readonly')) {
+        file_save_draft_area_files(
+                $draftitemid,
+                $context->id,
+                'mod_codeactivity',
+                'files_readonly',
+                0,
+                array(
+                    'subdirs' => false
+                    )
+                );    
+    }
+    
+    if ($draftitemid = file_get_submitted_draft_itemid('files_extra')) {
+        file_save_draft_area_files(
+                $draftitemid,
+                $context->id,
+                'mod_codeactivity',
+                'files_extra',
+                0,
+                array('subdirs' => false)); 
+    }
+    
     # You may have to add extra stuff in here #
 
     return $DB->update_record('codeactivity', $codeactivity);
@@ -315,7 +353,10 @@ function codeactivity_update_grades(stdClass $codeactivity, $userid = 0) {
  * @return array of [(string)filearea] => (string)description
  */
 function codeactivity_get_file_areas($course, $cm, $context) {
-    return array();
+    return array(
+        'files_student' => 'Student Files',
+        'files_readonly' => 'Read only files'
+    );
 }
 
 /**

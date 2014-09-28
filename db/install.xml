@@ -14,7 +14,9 @@
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated"/>
         
-        <FIELD NAME="langauge" TYPE="char" LENGTH="20" COMMENT="Language for this activity" />
+        <FIELD NAME="language" TYPE="char" LENGTH="20" COMMENT="Language for this activity" />
+        <FIELD NAME="duedate" TYPE="int" UNSIGNED="true" />
+        <FIELD NAME="opendate" TYPE="int" UNSIGNED="true" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

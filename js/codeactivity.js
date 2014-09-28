@@ -73,6 +73,7 @@ var codeActivity = {
         jQuery('#id_testtype').change(function() {
             jQuery('#ca-unittestcode, #ca-outputmatching').hide();
             if ('outputmatch' == jQuery(this).val()) {
+                codeActivity.updateFileList();
                 jQuery('#ca-outputmatching').show();
             } 
             else {

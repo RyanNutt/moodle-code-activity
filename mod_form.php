@@ -138,6 +138,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
      */
     private function filesSection() {
         $this->_form->addElement('header', 'files', 'Files'); 
+
         
         $this->_form->addElement(
                 'filemanager', 
@@ -150,6 +151,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
                 'files_student',
                 'files_student',
                 'codeactivity'); 
+        
         
         $this->_form->addElement(
                 'filemanager',
@@ -183,6 +185,9 @@ class mod_codeactivity_mod_form extends moodleform_mod {
     private function testsSection() {
         $this->_form->addElement('header', 'tests', 'Tests'); 
         
+        $this->_form->addElement('html', '<div id="ca-tests"><fieldset class="felement fitem"');
+        $this->_form->addElement('html', 'Contents'); 
+        $this->_form->addElement('html', '</fieldset></div>'); // #ca-tests
         
         $this->_form->addElement('html', '<div id="ca-add-test" style="display:none;">');
         //get_string('codeactivityname', 'codeactivity'), array('size'=>'64'));
@@ -246,4 +251,23 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         $this->_form->setType('ca_temp_code', PARAM_RAW); 
        
     }
+    function data_preprocessing(&$default_values) {
+        if ($this->current->instance) {
+            // editing existing instance - copy existing files into draft area
+            $draftitemid = file_get_submitted_draft_itemid('files_student');
+            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_codeactivity', 'files_student', 0, array('subdirs'=>false));
+            $default_values['files_student'] = $draftitemid;
+            
+            // Read only files
+            $draftitemid = file_get_submitted_draft_itemid('files_readonly');
+            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_codeactivity', 'files_readonly', 0, array('subdirs' => false));
+            $default_values['files_readonly'] = $draftitemid;
+            
+            // Extra files
+            $draftitemid = file_get_submitted_draft_itemid('files_extra');
+            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_codeactivity', 'files_extra', 0, array('subdirs' => false));
+            $default_values['files_extra'] = $draftitemid; 
+        }
+    }
+    
 }
