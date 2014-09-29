@@ -90,5 +90,96 @@ class codeactivity {
         return false; 
     }
     
+    public static function ajaxListFiles() {
+        $draftIDs = explode(',', $_POST['draftIDs']);
+        $files = array(); 
+        foreach ($draftIDs as $id) {
+            $data = repository::prepare_listing(file_get_drafarea_files($id, '/'));
+            if (!empty($data->list)) {
+                foreach ($data->list as $f) {
+                    $files[] = $f->filename;
+                }
+            } 
+        }
+
+        $out = array(
+            'draftIDs' => $draftIDs,
+            'files' => $files
+        );
+
+        header('Content-type: application/json');
+        echo json_encode($out);
+        die(); 
+    }
+    
+    /**
+     * Callback to add a new test to a specific activity. Returns back JSON
+     * that gives the calling script information about the addition, or failure
+     * of it. 
+     */
+    public static function ajaxAddTest() {
+        $out = array();
+        $out['status'] = true;
+        $out['action'] = 'addTest'; 
+        $out['POST'] = $_POST;
+        
+        $record = new stdClass();
+        $record->convert_nulls = ($_POST['convert_nulls']) ? 1 : 0;
+        $record->ignore_whitespace = $_POST['ignore_whitespace'] ? 1 : 0;
+        $record->expected_output = $_POST['expected_output'];
+        $record->run_file = $_POST['run_file'];
+        $record->test_name = $_POST['test_name'];
+        $record->test_type = $_POST['test_type'];
+        $record->unittest_code = $_POST['unittest_code'];
+        $record->activity_id = 0;
+        $record->temp_id = $_POST['temp_id'];
+        
+        $insertID = self::saveActivity($record); 
+        
+        $out['id'] = $insertID;
+        $out['html'] = self::testHTML($insertID);
+        
+        header('Content-type: application/json');
+        echo json_encode($out);
+        die(); 
+    }
+    
+    /**
+     * Returns the HTML to display a row for a specific test ID.
+     * @param type $testID
+     */
+    public static function testHTML($testID) {
+        global $DB, $CFG;
+        $result = $DB->get_record('codeactivity_tests', array('id' => $testID));
+        if (!$result) {
+            return 'Error retrieving test ID '.$testID;
+        }
+        else {
+            //print_r($result); 
+            $html = '<div class="test-wrapper">
+                    <img class="click" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/trash-32.png">
+                    <img class="click" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/pencil-32.png">
+                    <img src="' . $CFG->wwwroot . '/mod/codeactivity/pix/'.(($result->test_type=='unittest') ? 'code-32.png' : 'print-32.png') . '">
+                        <div class="name">' . $result->test_name . '</div>
+                </div>';
+            return $html;
+        }
+    }
+    
+    /**
+     * Save an activity to the database, or update it if it already exists
+     * 
+     * @param stdClass $activity
+     */
+    public static function saveActivity($activity) {
+        global $DB; 
+        if (!empty($activity->id)) {
+            return $DB->update_record('codeactivity_tests', $activity); 
+        }
+        else {
+            return $DB->insert_record('codeactivity_tests', $activity); 
+        }
+    }
+    
 }
 

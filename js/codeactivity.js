@@ -3,28 +3,14 @@ var codeActivity = {
     
     ajaxURL: false,
     
+    lang: {}, 
+    
     initEdit: function() {
         
         jQuery('#id_add_save').hide();
         jQuery('#id_add_cancel').hide(); 
         jQuery('#id_add_save').click(function() {
-            jQuery.ajax(codeActivity.ajaxURL,
-                {
-                    data: {
-                        uniq: jQuery('input[name=ca_temp_code]').val(),
-                        activityID: jQuery('input[name=coursemodule]').val(),
-                        testType: jQuery('#id_testtype').val(),
-                        testCode: jQuery('#id_unittestcode').val(),
-                        expectedOutput: jQuery('#id_expectedoutput').val(),
-                        convertNulls: jQuery('#id_convertnulls').val(),
-                        ignoreWhitespace: jQuery('#id_ignorewhitespace').val(),
-                        name: jQuery('#id_testname').val(),
-                        action: 'add',
-                        sessKey: jQuery('input[name=sesskey]').val()
-                    },
-                    type: 'POST'
-                }
-            )
+            codeActivity.ajaxAddTest();
         });
         jQuery('#id_add_test').click(function() {
             jQuery('#ca-add-test').slideDown(); 
@@ -66,13 +52,16 @@ var codeActivity = {
             // copy back to textarea on form submit...
             textarea.closest('form').submit(function () {
                 textarea.val(editor.getSession().getValue());
-            })
+            });
+            editor.on('change', function() {
+                textarea.val(editor.getSession().getValue()); 
+            });
  
         });
         
         jQuery('#id_testtype').change(function() {
             jQuery('#ca-unittestcode, #ca-outputmatching').hide();
-            if ('outputmatch' == jQuery(this).val()) {
+            if ('output' == jQuery(this).val()) {
                 codeActivity.updateFileList();
                 jQuery('#ca-outputmatching').show();
             } 
@@ -93,7 +82,7 @@ var codeActivity = {
             else if ('py2' == lang || 'py3' == lang) {
                 ace.edit('ace_id_unittestcode').getSession().setMode('ace/mode/python'); 
             }
-            console.info(ace.edit('ace_id_unittestcode')); 
+            //console.info(ace.edit('ace_id_unittestcode')); 
         });
         jQuery('#id_language').click(function() { jQuery(this).change(); });
         jQuery('#id_language').change(); 
@@ -124,12 +113,48 @@ var codeActivity = {
                 }
             }
         });
-        console.info(jQuery('input[name=files_readonly]').val());
-        console.info(jQuery('input[name=files_student]').val());
-        console.info(jQuery('input[name=files_extra]').val()); 
     },
     
-    ajaxAddTest: function() {
-        alert('Add the sucker'); 
+    ajaxAddTest: function() {  
+        if (jQuery('#id_testname').val().trim() == '') {
+            alert(codeActivity.lang.empty_name);
+            jQuery('#id_testname').focus();
+            return; 
+        }
+        
+        // Check for empty unittest code if using unittesting
+        if ('unittest' == jQuery('#id_testtype').val() && jQuery('#id_unittestcode').val().trim() == '') {
+            alert(codeActivity.lang.empty_test_code);
+            return; 
+        }
+        
+        jQuery.ajax(codeActivity.ajaxURL,   {
+            data: {
+                sessKey: jQuery('input[name=sesskey]').val(),
+                action: 'addTest',
+                test_name: jQuery('#id_testname').val(),
+                test_type: jQuery('#id_testtype').val(),
+                unittest_code: jQuery('#id_unittestcode').val(),
+                run_file: jQuery('#id_runfile').val(),
+                expected_output: jQuery('#id_expectedoutput').val(),
+                convert_nulls: jQuery('#id_convertnulls').val(),
+                ignore_whitespace: jQuery('#id_ignorewhitespace').val(),
+                temp_id: jQuery('input[name=ca_temp_code]').val()
+            },
+            type: 'POST',
+            success: function(data, status, xhr) {
+                if (data.status) {
+                    jQuery('#ca-tests').append(data.html);  
+                    jQuery('#id_testname').val('');
+                    jQuery('#id_testtype').val('unittest');
+                    jQuery('#id_unittestcode').val('');
+                    jQuery('#id_runfile').val('');
+                    jQuery('#id_convertnulls').val('0');
+                    jQuery('#id_ignorewhitespace').val('0');
+                    var editor = ace.edit('ace_id_unittestcode').getSession().setValue('');  
+                    jQuery('#id_add_cancel').click(); 
+                }
+            }
+        })
     }
 }

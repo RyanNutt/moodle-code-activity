@@ -110,7 +110,30 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         // add standard buttons, common to all modules
         $this->add_action_buttons();
         
-        $this->_form->addElement('html', '<script type="text/javascript">jQuery(document).ready(function() {codeActivity.initEdit(); codeActivity.ajaxURL = "' . $CFG->wwwroot . '/mod/codeactivity/ajax.php"; console.info(codeActivity);}); </script>'); 
+        $this->addScripts();
+         
+    }
+    
+    /**
+     * Add the JavaScript to the form to initialize what needs to be setup
+     * and also to add any localization strings to codeActivity.lang
+     * that are pulled from the language settings for the plugin
+     */
+    private function addScripts() {
+        global $CFG; 
+        $script = "<script type=\"text/javascript\">
+            jQuery(document).ready(function() {
+                codeActivity.initEdit(); 
+                codeActivity.ajaxURL = '" . $CFG->wwwroot . "/mod/codeactivity/ajax.php';
+                codeActivity.lang = {
+                    empty_name: '" . addslashes(get_string('js_empty_name', 'codeactivity')) . "',
+                    empty_test_code: '" . addslashes(get_string('js_empty_test_code', 'codeactivity'))."',
+                    error_add: '" . addslashes(get_string('js_error_add', 'codeactivity'))."'
+                }
+            });
+            </script>";
+        
+        $this->_form->addElement('html', $script);
     }
     
     /**
@@ -203,7 +226,7 @@ class mod_codeactivity_mod_form extends moodleform_mod {
                 get_string('test_type', 'codeactivity'), 
                 array(
                     'unittest' => get_string('unittest', 'codeactivity'), 
-                    'outputmatch' => get_string('outputmatch', 'codeactivity')
+                    'output' => get_string('outputmatch', 'codeactivity')
                     )
                 ); 
         

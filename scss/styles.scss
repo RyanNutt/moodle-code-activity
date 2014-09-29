@@ -17,9 +17,28 @@
 
 #ca-tests {
     width: 100%;
-    background: silver; 
 }
 
 #id_runfile {
     max-width: 100%; 
+}
+
+.test-wrapper {
+    height: 40px;
+    .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space:nowrap; 
+        float: left; 
+    }
+    img {
+        float: right;
+        display:block; 
+        width: 32px;
+        height: 32px;
+        margin-left: 16px;
+        &.click {
+            cursor: pointer;
+        }
+    }
 }

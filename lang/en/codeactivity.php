@@ -88,3 +88,13 @@ $string['runfile']              = 'File to run';
 
 // Messages
 $string['err_nolanguages'] = 'There are currently no languages set. You will need to <a href="'.$CFG->wwwroot.'/admin/settings.php?section=modsettingcodeactivity">set at least one language</a> before using any activity created by this plugin.'; 
+
+// Javascript messages
+$string['js_empty_name']        = 'Please enter a name for this test'; 
+$string['js_error_add']         = 'Unable to add this test. More information may be available in the console.';
+$string['js_empty_test_code']   = 'Please enter unit test code for this test.'; 
+
+$string['edit_test']            = 'Edit this test';
+$string['delete_test']          = 'Delete this test';
+$string['type_unittest']        = 'Unit test';
+$string['type_output']          = 'Output matching test'; 

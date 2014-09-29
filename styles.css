@@ -1,6 +1,11 @@
 /* CSS file for Code Activity Moodle plugin. See http://www.nutt.net for more information */
 .ca-error { -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; border-radius: 4px; border: 1px solid red; background: #ffe5e5; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; }
 
-#ca-tests { width: 100%; background: silver; }
+#ca-tests { width: 100%; }
 
 #id_runfile { max-width: 100%; }
+
+.test-wrapper { height: 40px; }
+.test-wrapper .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; float: left; }
+.test-wrapper img { float: right; display: block; width: 32px; height: 32px; margin-left: 16px; }
+.test-wrapper img.click { cursor: pointer; }
