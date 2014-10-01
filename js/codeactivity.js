@@ -148,7 +148,7 @@ var codeActivity = {
             success: function(data, status, xhr) {
                 if (data.status) {
                     jQuery('#ca-tests').append(data.html);
-                    //codeActivity.resetAddForm(); 
+                    codeActivity.resetTestIcons(); 
                     jQuery('#id_add_cancel').click(); 
                 }
             }
