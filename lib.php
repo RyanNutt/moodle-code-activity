@@ -67,13 +67,59 @@ function codeactivity_supports($feature) {
  * @return int The id of the newly inserted codeactivity record
  */
 function codeactivity_add_instance(stdClass $codeactivity, mod_codeactivity_mod_form $mform = null) {
-    global $DB;
+    global $DB, $CFG;
 
     $codeactivity->timecreated = time();
 
-    # You may have to add extra stuff in here #
+    $context = context_module::instance($codeactivity->coursemodule);
+    if ($draftitemid = file_get_submitted_draft_itemid('files_student')) {
+        
+        file_save_draft_area_files(
+                $draftitemid, 
+                $context->id, 
+                'mod_codeactivity', 
+                'files_student', 
+                0, 
+                array(
+                    'subdirs'=>false
+                    )
+                );
+    }
+    
+    if ($draftitemid = file_get_submitted_draft_itemid('files_readonly')) {
+        file_save_draft_area_files(
+                $draftitemid,
+                $context->id,
+                'mod_codeactivity',
+                'files_readonly',
+                0,
+                array(
+                    'subdirs' => false
+                    )
+                );    
+    }
+    
+    if ($draftitemid = file_get_submitted_draft_itemid('files_extra')) {
+        file_save_draft_area_files(
+                $draftitemid,
+                $context->id,
+                'mod_codeactivity',
+                'files_extra',
+                0,
+                array('subdirs' => false)); 
+    }
+    
 
-    return $DB->insert_record('codeactivity', $codeactivity);
+    //print_r($codeactivity);  
+    //die(); 
+    $id = $DB->insert_record('codeactivity', $codeactivity);
+    
+    if ($id) {
+        $DB->execute("UPDATE " . $CFG->prefix . 'codeactivity_tests SET activity_id=' . $id . ' WHERE temp_id="' . $codeactivity->ca_temp_code . '"');
+    }
+
+    //var_dump($id); die(); 
+    return $id; 
 }
 
 /**
@@ -88,8 +134,8 @@ function codeactivity_add_instance(stdClass $codeactivity, mod_codeactivity_mod_
  * @return boolean Success/Fail
  */
 function codeactivity_update_instance(stdClass $codeactivity, mod_codeactivity_mod_form $mform = null) {
-    global $DB, $USER;
-
+    global $DB, $USER, $CFG;
+    
     $codeactivity->timemodified = time();
     $codeactivity->id = $codeactivity->instance;
     //print_r($codeactivity); die(); 
@@ -132,7 +178,7 @@ function codeactivity_update_instance(stdClass $codeactivity, mod_codeactivity_m
     }
     
     # You may have to add extra stuff in here #
-
+    $DB->execute("UPDATE " . $CFG->prefix . 'codeactivity_tests SET activity_id=' . $codeactivity->id . ' WHERE temp_id="' . $codeactivity->ca_temp_code . '"');
     return $DB->update_record('codeactivity', $codeactivity);
 }
 

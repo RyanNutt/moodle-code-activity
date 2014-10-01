@@ -3,6 +3,7 @@ var codeActivity = {
     
     ajaxURL: false,
     
+    /** Used to hold language strings for individual pages */
     lang: {}, 
     
     initEdit: function() {
@@ -130,16 +131,16 @@ var codeActivity = {
         
         jQuery.ajax(codeActivity.ajaxURL,   {
             data: {
-                sessKey: jQuery('input[name=sesskey]').val(),
-                action: 'addTest',
-                test_name: jQuery('#id_testname').val(),
-                test_type: jQuery('#id_testtype').val(),
-                unittest_code: jQuery('#id_unittestcode').val(),
-                run_file: jQuery('#id_runfile').val(),
-                expected_output: jQuery('#id_expectedoutput').val(),
-                convert_nulls: jQuery('#id_convertnulls').val(),
-                ignore_whitespace: jQuery('#id_ignorewhitespace').val(),
-                temp_id: jQuery('input[name=ca_temp_code]').val()
+                sessKey:            jQuery('input[name=sesskey]').val(),
+                action:             'addTest',
+                test_name:          jQuery('#id_testname').val(),
+                test_type:          jQuery('#id_testtype').val(),
+                unittest_code:      jQuery('#id_unittestcode').val(),
+                run_file:           jQuery('#id_runfile').val(),
+                expected_output:    jQuery('#id_expectedoutput').val(),
+                convert_nulls:      jQuery('#id_convertnulls').val(),
+                ignore_whitespace:  jQuery('#id_ignorewhitespace').val(),
+                temp_id:            jQuery('input[name=ca_temp_code]').val()
             },
             type: 'POST',
             success: function(data, status, xhr) {

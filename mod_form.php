@@ -59,7 +59,8 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         $PAGE->requires->js('/mod/codeactivity/js/ace/ace.js'); 
         
         $mform = $this->_form;
-
+         
+        //echo '<pre>'.print_r($this, true).'</pre>';  
         /* Check to see if there are languages set, and if not display
          * a message.  The $languages variable is going to be used later
          * as well when the select box for languages is displayed. 
@@ -206,11 +207,24 @@ class mod_codeactivity_mod_form extends moodleform_mod {
      * @param type $mform
      */
     private function testsSection() {
+        global $DB, $CFG;
+        //echo '<pre>'.print_r($CFG, true).'</pre>'; 
         $this->_form->addElement('header', 'tests', 'Tests'); 
         
-        $this->_form->addElement('html', '<div id="ca-tests"><fieldset class="felement fitem"');
-        $this->_form->addElement('html', 'Contents'); 
-        $this->_form->addElement('html', '</fieldset></div>'); // #ca-tests
+        $this->_form->addElement('html', '<div id="ca-tests">');
+        
+        // Get existing tests
+        $tests = $DB->get_records('codeactivity_tests', array('activity_id' => $this->current->id)); 
+        //echo '<pre>'.print_r($this, true).'</pre>'; 
+        if (!empty($tests)) {
+            foreach ($tests as $test) {
+                //echo '<pre>'.print_r($test, true).'</pre>'; 
+                $this->_form->addElement('html', codeactivity::testHTML($test->id));
+            } 
+        } 
+        
+        
+        $this->_form->addElement('html', '</div>'); // #ca-tests
         
         $this->_form->addElement('html', '<div id="ca-add-test" style="display:none;">');
         //get_string('codeactivityname', 'codeactivity'), array('size'=>'64'));
