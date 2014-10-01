@@ -157,9 +157,9 @@ class codeactivity {
         else {
             //print_r($result); 
             $html = '<div class="test-wrapper">
-                    <img class="click" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/trash-32.png">
-                    <img class="click" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/pencil-32.png">
-                    <img src="' . $CFG->wwwroot . '/mod/codeactivity/pix/'.(($result->test_type=='unittest') ? 'code-32.png' : 'print-32.png') . '">
+                    <img class="click ca-trash" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/trash-32.png" title="'.get_string('delete_this_test', 'codeactivity').'" data-id="'.$testID.'">
+                    <img class="click ca-edit" src="' . $CFG->wwwroot . '/mod/codeactivity/pix/pencil-32.png" title="'.get_string('edit_this_test', 'codeactivity').'" data-id="'.$testID.'">
+                    <img src="' . $CFG->wwwroot . '/mod/codeactivity/pix/'.(($result->test_type=='unittest') ? 'code-32.png' : 'print-32.png') . '" title="'.(($result->test_type=='unittest') ? get_string('unittest', 'codeactivity') : get_string('outputmatch', 'codeactivity')).'">
                         <div class="name">' . $result->test_name . '</div>
                 </div>';
             return $html;

@@ -26,6 +26,7 @@ var codeActivity = {
             jQuery('#id_add_test').show();
             jQuery('#id_add_save').hide();
             jQuery('#id_add_cancel').hide(); 
+            codeActivity.resetAddForm();
         });
         ace.config.set('basePath', M.cfg.wwwroot + '/mod/codeactivity/js/ace'); 
         jQuery('#id_expectedoutput, #id_unittestcode').each(function () {
@@ -87,6 +88,7 @@ var codeActivity = {
         });
         jQuery('#id_language').click(function() { jQuery(this).change(); });
         jQuery('#id_language').change(); 
+        codeActivity.resetTestIcons();
         //console.info(window); 
          
     },
@@ -145,17 +147,38 @@ var codeActivity = {
             type: 'POST',
             success: function(data, status, xhr) {
                 if (data.status) {
-                    jQuery('#ca-tests').append(data.html);  
-                    jQuery('#id_testname').val('');
-                    jQuery('#id_testtype').val('unittest');
-                    jQuery('#id_unittestcode').val('');
-                    jQuery('#id_runfile').val('');
-                    jQuery('#id_convertnulls').val('0');
-                    jQuery('#id_ignorewhitespace').val('0');
-                    var editor = ace.edit('ace_id_unittestcode').getSession().setValue('');  
+                    jQuery('#ca-tests').append(data.html);
+                    //codeActivity.resetAddForm(); 
                     jQuery('#id_add_cancel').click(); 
                 }
             }
         })
+    },
+    
+    resetAddForm: function() {          
+        jQuery('#id_testname').val('');
+        jQuery('#id_testtype').val('unittest');
+        jQuery('#id_unittestcode').val('');
+        jQuery('#id_runfile').val('');
+        jQuery('#id_convertnulls').val('0');
+        jQuery('#id_ignorewhitespace').val('0');
+        ace.edit('ace_id_unittestcode').getSession().setValue('');  
+    },
+    
+    deleteTest: function(id) { 
+        if (confirm('Are you sure you want to delete this test')) {
+            alert('Deleting #' + id);
+        }
+    },
+    
+    editTest: function(id) { 
+        alert('Editing activity #' + id); 
+    },
+    
+    /* Detach and reattach click handlers to the edit buttons */
+    resetTestIcons: function() {
+        jQuery('#ca-tests img').off('click');
+        jQuery('#ca-tests img.ca-trash').click(function(event) { codeActivity.deleteTest(jQuery(event.target).data('id')); });
+        jQuery('#ca-tests img.ca-edit').click(function() { codeActivity.editTest(jQuery(event.target).data('id')); });
     }
 }
