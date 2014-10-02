@@ -35,11 +35,17 @@ require_once(dirname(__FILE__).'/inc/classes/codeactivity.php');
 // For unit tests to work.
 global $CFG, $PAGE;
 
+require_login(); 
+  
+
 if ($_POST['action'] == 'listFiles') {
     codeactivity::ajaxListFiles(); 
 }
 else if ($_POST['action'] == 'addTest') {
     codeactivity::ajaxAddTest();
+}
+else if ($_POST['action'] == 'deleteTest') {
+    codeactivity::ajaxDeleteTest();
 }
 else {
     die('Invalid action parameter: ' . $_POST['action']);

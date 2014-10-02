@@ -181,5 +181,35 @@ class codeactivity {
         }
     }
     
+    /**
+     * Ajax callback to delete a test from the database.
+     * 
+     * All parameters are pulled from POST
+     */
+    public static function ajaxDeleteTest() {
+        global $DB; 
+        $context = context_module::instance($_POST['context']);
+        if (!has_capability('mod/codeactivity:addinstance', $context)) {
+            self::ajaxFail('Capability error'); 
+        }
+        
+        $DB->delete_records('codeactivity_tests', array('id' => $_POST['id'])); 
+        die('1'); 
+    }
+    
+    /**
+     * Sends back a failure message in JSON
+     */
+    public static function ajaxFail($msg = 'Invalid call') {
+        $out = array(
+            'message' => $msg,
+            'status' => false
+        );
+        
+        header('HTTP/1.1 403');
+        header('Content-type: application/json');
+        die(json_encode($out)); 
+    }
+    
 }
 

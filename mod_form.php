@@ -129,7 +129,9 @@ class mod_codeactivity_mod_form extends moodleform_mod {
                 codeActivity.lang = {
                     empty_name: '" . addslashes(get_string('js_empty_name', 'codeactivity')) . "',
                     empty_test_code: '" . addslashes(get_string('js_empty_test_code', 'codeactivity'))."',
-                    error_add: '" . addslashes(get_string('js_error_add', 'codeactivity'))."'
+                    error_add: '" . addslashes(get_string('js_error_add', 'codeactivity'))."',
+                    error_delete: '" . addslashes(get_string('js_error_delete', 'codeactivity'))."',
+                    error_forbidden: '" . addslashes(get_string('js_error_forbidden', 'codeactivity'))."'
                 }
             });
             </script>";
@@ -207,8 +209,9 @@ class mod_codeactivity_mod_form extends moodleform_mod {
      * @param type $mform
      */
     private function testsSection() {
-        global $DB, $CFG;
-        //echo '<pre>'.print_r($CFG, true).'</pre>'; 
+        global $DB, $CFG, $PAGE;
+        //var_dump($PAGE->context->id);   
+        //echo '<pre>'.print_r($PAGE, true).'</pre>'; 
         $this->_form->addElement('header', 'tests', 'Tests'); 
         
         $this->_form->addElement('html', '<div id="ca-tests">');
@@ -286,6 +289,9 @@ class mod_codeactivity_mod_form extends moodleform_mod {
         
         $this->_form->addElement('hidden', 'ca_temp_code', uniqid()); 
         $this->_form->setType('ca_temp_code', PARAM_RAW); 
+        //echo '<pre>'.print_r($PAGE->context, true).'</pre>'; 
+        $this->_form->addElement('hidden', 'ca_context', $PAGE->context->instanceid);
+        $this->_form->setType('ca_context', PARAM_RAW); 
        
     }
     function data_preprocessing(&$default_values) {

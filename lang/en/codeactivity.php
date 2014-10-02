@@ -84,3 +84,6 @@ $string['type_output']              = 'Output matching test';
 $string['type_unittest']            = 'Unit test';
 $string['unittest']                 = 'Unit Test';
 $string['unittest_code']            = 'Unit Test Code'; 
+$string['js_error_delete']          = 'There was an unexpected error trying to delete this test. There may be more information available in the console.' ;
+$string['js_error_forbidden']       = 'The server returned a "forbidden" error to the last request. This is normally caused by an incorrect capability setting.'; 
+        

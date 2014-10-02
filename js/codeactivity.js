@@ -152,7 +152,7 @@ var codeActivity = {
                     jQuery('#id_add_cancel').click(); 
                 }
             }
-        })
+        });
     },
     
     resetAddForm: function() {          
@@ -167,7 +167,39 @@ var codeActivity = {
     
     deleteTest: function(id) { 
         if (confirm('Are you sure you want to delete this test')) {
-            alert('Deleting #' + id);
+            //jQuery('img[data-id=' + id + ']').parent().remove(); 
+            jQuery.ajax(codeActivity.ajaxURL, {
+                data: {
+                    action: 'deleteTest',
+                    sessKey: jQuery('input[name=sesskey]').val(),
+                    id: id,
+                    context: jQuery('input[name=coursemodule]').val()
+                },
+                type: 'POST',
+                
+                success: function(data, status, xhr) {
+                    if (data=='1') {
+                        jQuery('img[data-id=' + id + ']').parent().remove(); 
+                    }
+                    else {
+                        alert(codeActivity.lang.error_delete);
+                        if (console.info){
+                            console.info(xhr); 
+                        }
+                    }
+                },
+                error: function(xhr, status, err) {
+                    if (xhr.status == 403) {
+                        alert(codeActivity.lang.error_forbidden);
+                    }
+                    else {
+                        alert(codeActivity.lang.error_delete); 
+                    }
+                    if (console.info) {
+                        console.info(xhr); 
+                    }
+                }
+            });
         }
     },
     
